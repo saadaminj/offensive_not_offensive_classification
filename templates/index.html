@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Classification App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        label {
+            font-size: 16px;
+            color: #333;
+        }
+
+        input {
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Offensive & Not Offensive Classifier</h1>
+    
+    <form action="/predict_tweet" method="post">
+        <label for="tweet">Enter a new sentence:</label>
+        <input type="text" id="tweet" name="tweet" required>
+        <button type="submit">Predict</button>
+    </form>
+
+    <form action="/generate_wordcloud/0" method="get">
+        <button type="submit">Generate Word Cloud for Non-Offensive Tweets</button>
+    </form>
+
+    <form action="/generate_wordcloud/1" method="get">
+        <button type="submit">Generate Word Cloud for Offensive Tweets</button>
+    </form>
+
+    <form action="/train_model" method="get">
+        <button type="submit">Train Models</button>
+    </form>
+    <div style="text-align: center; margin-top: 20px;">
+        {% if tweet %}
+            <p style="font-size: 18px; color: #333; margin-bottom: 10px;">Original Sentence: {{ tweet }}</p>
+        {% endif %}
+        
+        {% if lr_prediction is defined %}
+            <p style="font-size: 18px; color: #333; margin-bottom: 10px;">
+                Logistic Regression Prediction: 
+                <span style="color: {% if lr_prediction == 1 %}#ff6347{% else %}#4caf50{% endif %};">
+                    {% if lr_prediction == 1 %} Offensive {% else %} Not Offensive {% endif %}
+                </span>
+            </p>
+        {% endif %}
+        
+        {% if svc_prediction is defined %}
+            <p style="font-size: 18px; color: #333;">
+                SVC Prediction: 
+                <span style="color: {% if svc_prediction == 1 %}#ff6347{% else %}#4caf50{% endif %};">
+                    {% if svc_prediction == 1 %} Offensive {% else %} Not Offensive {% endif %}
+                </span>
+            </p>
+        {% endif %}
+    </div>
+    
+    
+</body>
+</html>
